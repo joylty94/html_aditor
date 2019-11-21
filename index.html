@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="ko" ng-app="myApp" ng-cloak>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:400,500,700&display=swap" rel="stylesheet">
+<title>Document</title>
+<style>
+    [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+      display: none !important;
+    }
+    html, body{
+        height:100%;
+        width: 100%;
+    }
+    .code_wrap{
+        margin: 0;
+        padding: .85em 1em;
+        margin-bottom: 1.275em;
+        background: #f7f7f7;
+        position: relative;
+        min-height: 200px;
+        word-break: break-all;
+    }
+    .code_wrap .copy{
+        position: absolute;
+        top:0;
+        right:0;
+        width: 50px;
+        text-align: center;
+        word-break: break-all;
+    }
+    .preview_wrap .preview_group{
+        position: relative;
+    }
+    .preview_wrap .preview_group .editor{
+        position: absolute;
+        top: 5px;
+        right: 5px;
+    }
+    .active{
+        background: #fff;
+    }
+    .main{
+        width: 100%;
+        height: 100%;
+        padding-right:510px;
+        background:rgb(248,249,250)
+    }
+    .form_wrap{
+        position:fixed; width: 440px;right:2%;top:15px;padding: 15px 10px 0; border: 1px solid rgb(206,212,218);background: #fff;
+    }
+    @media only screen and (max-width: 1500px) {
+        .main{
+            padding-right: 0px;
+        }
+        .form_wrap{
+            position:unset;
+            width: 1000px;
+            margin: 0 auto;
+            padding: 15px 20px 0;
+        }
+    }
+</style>
+</head>
+<body>
+	<div ng-controller="mainController" class="main"/>
+		<div class="form_wrap">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <div class="col-sm-6">
+                    <select class="form-control" ng-model="selectType">
+                      <option value=''>선택</option>
+                      <option ng-repeat="i in typeName">{{i}}</option>
+                    </select>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <div class="col-sm-4" ng-if="selectType == '이미지옵션항목'" style="margin-bottom: 15px;">
+                    <select class="form-control" ng-model="$parent.selectImageType">
+                      <option value=''>선택</option>
+                      <option ng-repeat="i in typeImageName" value="{{i}}">{{i}}</option>
+                    </select>
+                </div>
+                <div class="col-sm-12">
+                  <textarea class="form-control" rows="6" ng-model='formText'></textarea>
+                </div>
+              </div>
+              
+              <div class="form-group" ng-if="selectType == '이미지옵션항목'">
+                <div class="col-sm-4" style="margin-bottom: 15px;">
+                    <select class="form-control" ng-model="$parent.selectImageType2">
+                      <option value=''>선택</option>
+                      <option ng-repeat="i in typeImageName" value="{{i}}">{{i}}</option>
+                    </select>
+                </div>
+                <div class="col-sm-12">
+                  <textarea class="form-control" rows="6" ng-model='$parent.formTextsub'></textarea>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <div class="col-sm-12" ng-if="!updateMode">
+                  <button type="button" class="btn btn-default" ng-click="transformation()">변환</button>
+                  <button type="button" class="btn btn-default" ng-if="code.length >= 1" ng-click="handleUpdateHtml()">수정</button>
+
+                </div>
+                <div class="col-sm-12" ng-if="updateMode">
+                  <button type="button" class="btn btn-default" ng-if="code.length >= 1" ng-click="updateHtml()">수정</button>
+                  <button type="button" class="btn btn-default" ng-if="code.length >= 1" ng-click="orderUp()">올리기</button>
+                  <button type="button" class="btn btn-default" ng-if="code.length >= 1" ng-click="orderDown()">내리기</button>
+                  <button type="button" class="btn btn-default" ng-if="code.length >= 1" ng-click="deleteHtml()">삭제</button>
+                  <button type="button" class="btn btn-default" ng-if="code.length >= 1" ng-click="cancel()">취소</button>
+                </div>
+              </div>
+            </form>
+		</div>
+		<div style="width:100%; padding-top: 15px">
+		<div style="width:1000px; margin: 0 auto; padding: 15px 20px 0;background: #fff;">
+<!--             <div class="code_wrap row"> -->
+<!--             	<div ng-repeat="(i, c) in code"> -->
+<!--             		{{c['code']}} -->
+<!--             	</div> -->
+
+<!--             </div> -->
+ 			<div class="form-group">
+                <button type="button" class="btn btn-default" ng-if="code.length >= 1" ng-click="handleView()">{{viewMode}}</button>
+                <button type="button" class="btn btn-default" ng-if="code.length >= 1" ng-click="pcHtmlCopy('P')">PC 코드 복사</button>
+                <button type="button" class="btn btn-default" ng-if="code.length >= 1" ng-click="pcHtmlCopy('M')">MOBILE 코드 복사</button>
+            </div>
+            <div class="preview_wrap" ng-repeat="(i, c) in code"> 
+            	<div class="preview_group" ng-if="viewMode == 'PC'" ng-click="editor($event, i)">            	
+                	<div ng-bind-html="trustAsHtml(c['code'])"></div>
+            	</div> 
+            	<div class="preview_group" ng-if="viewMode == 'MOBILE'" ng-click="editor($event, i)" style="width:480px; margin:0 auto">            	
+                	<div  ng-bind-html="trustAsHtml(c['mCode'])"></div>
+            	</div>           
+            </div>
+		</div>
+		</div>
+	</div>
+</body>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular-sanitize.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script>
+	var myApp = angular.module('myApp', ['ngSanitize']);
+	myApp.controller('mainController', function($scope, $http, $sce) {
+	
+		$scope.trustAsHtml = function(string) {
+		    return $sce.trustAsHtml(string);
+		};
+		
+		$scope.typeName =['서브타이틀', '타이틀', '상품설명', '이미지', '섹션타이틀(Check Point)','이미지옵션항목', '섹션타이틀(Pick)', '옵션타이틀', '옵션항목', '팁(Tip)']
+		$scope.typeImageName = ['성분','유통','활용법','브랜드']
+		$scope.pcHtmlType = {
+				'서브타이틀' : '<h3 style="font-family:'+ 'Noto Sans' +';font-size:24px;padding-bottom:14px;line-height:15px;color:#666;padding-top:75px;text-align:center;margin:0">~</h3>',
+				'타이틀' : '<h2 style="font-family:'+ 'Noto Sans' +';padding-bottom:35px;font-size:38px;line-height:46px;text-align: center;border-bottom: 1px solid #c1c1c1;color: #666;margin:0;font-weight:700;">~</h2>',
+				'상품설명' : '<p style="font-family:'+ 'Noto Sans' +';padding: 28px 0 0;font-size:18px;line-height: 32px;color: #373737;text-align:left;margin:0;white-space: pre-wrap;word-break: break-all;">~</p>',
+				'이미지': '<img src="~" style="width:100%"/>',
+				'섹션타이틀(Check Point)' : '<div style="position: relative"><h2 style="font-family:'+ 'Noto Sans' +';color:#656565;line-height: 50px;display: inline-block;text-align:center;z-index: 10;font-size: 50px;width: 100%;margin-bottom: 70px;margin-top: 170px;font-weight: 700;color: #666;"><span style="position: relative;z-index: 10;display: inline-block;padding: 0 15px;background: #fff;">Secret Check Point</span><span style="position: absolute;z-index: 1;top: 194px;width: 100%;height: 1px;background: #b9b9b9;left: 0;"></span></h2></div>',
+				'이미지옵션항목': '<div style="float:left;width:50%;padding-right:50px;"><img src="^" style="margin-bottom: 20px;"/><p style="font-family:'+ 'Noto Sans' +';font-size: 18px;line-height: 32px;color: #373737;margin-bottom:20px;">~</p></div>',
+				'섹션타이틀(Pick)' : '<div style="position: relative"><h2 style="font-family:'+ 'Noto Sans' +';line-height: 50px;color:#656565;display: inline-block;text-align: center;z-index: 10;font-size: 50px;width: 100%;margin-bottom: 70px;margin-top: 170px;font-weight: 700;color: #666;"><span style="position: relative;z-index: 10;display: inline-block;padding: 0 15px;background: #fff;">Secret Pick</span><span style="position: absolute;z-index: 1;top: 194px;width: 100%;height: 1px;background: #b9b9b9;left: 0;"></span></h2></div>',
+				'옵션타이틀': '<h3 style="font-family:'+ 'Noto Sans' +';font-size: 30px;padding: 55px 0 20px;line-height: 38px;color: #373737;margin:0;">~</h3>',
+				'옵션항목': '<p style="font-family:'+ 'Noto Sans' +';font-size: 18px;line-height: 32px;color: #373737; margin:0;"><strong>^</strong>~</p>',
+				'팁(Tip)' : '<div style="padding: 170px 0;"><h2 style="font-family:'+ 'Noto Sans' +';position: relative;z-index: 10;background: #fff;display: inline-block;font-size: 36px;line-height:36px;padding:0 10px;margin: 0 0 0 48px;;font-weight: 700;color: #666;text-shadow: 0 0;letter-spacing: 1px;">Secret Tip</h2><div style="margin-top: -22px;border: 1px solid #b9b9b9;padding: 60px 62px;"><h3 style="font-family:'+ 'Noto Sans' +';display: block;font-size: 25px;line-height: 38px;margin:  0 0 10px 0;">^</h3><p style="font-family:'+ 'Noto Sans' +';margin: 0;font-size: 18px;line-height: 32px;">~</p></div></div>'
+			}
+		$scope.mobileHtmlType = {
+				'서브타이틀' : '<h3 style="font-family:'+ 'Noto Sans' +';font-size:20px;padding-bottom:7px;line-height:22px;color:#666;padding-top:48px;text-align:center;margin:0">~</h3>',
+				'타이틀' : '<h2 style="font-family:'+ 'Noto Sans' +';padding-bottom:24px;font-size:26px;line-height:32px;text-align: center;border-bottom: 1px solid #c1c1c1;color: #666;margin:0;font-weight:700;">~</h2>',
+				'상품설명' : '<p style="font-family:'+ 'Noto Sans' +';padding: 24px 0 36px;font-size:14px;line-height: 23px;color: #373737;text-align:left;margin:0;white-space: pre-wrap;word-break: break-all;">~</p>',
+				'이미지': '<img src="~" style="width:100%"/>',
+				'섹션타이틀(Check Point)' : '<div style="position: relative"><h2 style="font-family:'+ 'Noto Sans' +';color:#656565;display: inline-block;text-align:center;z-index: 10;font-size: 22.5px;line-height: 22.5px;width: 100%;margin-bottom: 50px;margin-top: 90px;font-weight: 700;color: #666;"><span style="position: relative;z-index: 10;display: inline-block;padding: 0 15px;background: #fff;">Secret Check Point</span><span style="position: absolute;z-index: 1;top: 100px;width: 100%;height: 1px;background: #b9b9b9;left: 0;"></span></h2></div>',
+				'이미지옵션항목': '<div style="float:left;width:100%;padding-right:50px;"><img src="^" style="margin-bottom: 15px;"/><p style="font-family:'+ 'Noto Sans' +';font-size: 14px;line-height: 23px;color: #373737;margin-bottom:25px;">~</p></div>',
+				'섹션타이틀(Pick)' : '<div style="position: relative"><h2 style="font-family:'+ 'Noto Sans' +';color:#656565;display: inline-block;text-align:center;z-index: 10;font-size: 22.5px;line-height: 22.5px;width: 100%;margin-bottom: 50px;margin-top: 90px;font-weight: 700;color: #666;"><span style="position: relative;z-index: 10;display: inline-block;padding: 0 15px;background: #fff;">Secret Pick</span><span style="position: absolute;z-index: 1;top: 100px;width: 100%;height: 1px;background: #b9b9b9;left: 0;"></span></h2></div>',
+				'옵션타이틀': '<h3 style="font-family:'+ 'Noto Sans' +';font-size: 18px;padding: 36px 0 16px;line-height: 24px;color: #373737;margin:0;">~</h3>',
+				'옵션항목': '<p style="font-family:'+ 'Noto Sans' +';font-size: 14px;line-height: 23px;color: #373737; margin:0;"><strong>^</strong>~</p>',
+				'팁(Tip)' : '<div style="padding: 100px 0;"><h2 style="font-family:'+ 'Noto Sans' +';position: relative;z-index: 10;background: #fff;display: inline-block;font-size: 18px;line-height:18pxpadding:0 10px;margin: 0 0 0 16px;;font-weight: 700;color: #666;text-shadow: 1px 0;letter-spacing: 0.5px;">Secret Tip</h2><div style="margin-top: -12px;border: 1px solid #b9b9b9;padding: 30px 20px 20px;"><h3 style="font-family:'+ 'Noto Sans' +';display: block;font-size: 18px;line-height: 24px;margin:  0 0 5px;">^</h3><p style="font-family:'+ 'Noto Sans' +';margin: 0;font-size: 14px;line-height: 23px;">~</p></div></div>'
+			}
+		$scope.code = []
+		$scope.imageOptionArray = []
+		$scope.selectNum = null;
+		$scope.updateMode = false;
+		$scope.viewMode = 'PC'
+
+		// view 이벤트
+		$scope.handleView = function(){
+			console.log($scope.viewMode)
+			if($scope.viewMode == 'PC'){ $scope.viewMode = "MOBILE"}
+			else if($scope.viewMode == 'MOBILE'){ $scope.viewMode = "PC"}
+		}
+			
+		// 수정항목 순서 올리기 이벤트
+		$scope.orderUp = function(){
+			if($scope.selectNum > 0){
+    			var tmp = $scope.code[$scope.selectNum -1]
+    			$scope.code.splice($scope.selectNum - 1, 1, $scope.code[$scope.selectNum])
+    			$scope.code.splice($scope.selectNum , 1, tmp)
+    			$scope.selectNum = $scope.selectNum - 1
+			}
+		}
+
+		// 수정항목 순서 내리기 이벤트
+		$scope.orderDown = function(){
+			console.log($scope.code.length)
+			console.log($scope.selectNum)
+			if($scope.selectNum < $scope.code.length - 1){
+    			var tmp = $scope.code[$scope.selectNum + 1]
+    			$scope.code.splice($scope.selectNum + 1, 1, $scope.code[$scope.selectNum])
+    			$scope.code.splice($scope.selectNum , 1, tmp)
+    			$scope.selectNum = $scope.selectNum + 1
+			}
+		}
+
+		$scope.transformation = function(){
+			if(!$scope.selectType){
+				alert('타입 정보가 없습니다.')
+				return 0;
+			}
+			
+			if($scope.selectType == '이미지옵션항목'){
+				if($scope.selectImageType == undefined){
+    				alert('이미지 타입을 선택해 주세요.')
+    				return 0;
+				}
+			}
+			if(!$scope.selectType.includes('섹션타이틀')){
+    			if(!$scope.formText){
+    				alert('택스트 정보가 없습니다.')
+    				return 0;
+    			}
+			}
+
+			if(!$scope.updateMode){
+				if($scope.selectType.includes('섹션타이틀')){
+					$scope.code.push({'type': $scope.selectType, 'code': $scope.pcHtmlType[$scope.selectType], 'mCode': $scope.mobileHtmlType[$scope.selectType]})				
+				}else if($scope.selectType == '옵션항목'){
+					var shtml = $scope.pcHtmlType[$scope.selectType].split('^')[0];
+					var fhtml = $scope.pcHtmlType[$scope.selectType].split('^')[1].split('~')[0];
+					var bhtml = $scope.pcHtmlType[$scope.selectType].split('^')[1].split('~')[1];
+
+					var m_shtml = $scope.mobileHtmlType[$scope.selectType].split('^')[0];
+					var m_fhtml = $scope.mobileHtmlType[$scope.selectType].split('^')[1].split('~')[0];
+					var m_bhtml = $scope.mobileHtmlType[$scope.selectType].split('^')[1].split('~')[1];
+					
+					if(!$scope.formText.includes(':')){
+						alert('옵션 항목 형식이 아닙니다.')
+						return 0;
+					}
+					
+    				if($scope.formText.includes('\n')){
+    					var textArray = $scope.formText.split("\n");
+						for (var ar of textArray){
+    						$scope.code.push({'type': $scope.selectType, 'code': shtml + ar.split(':')[0] + ' : ' + fhtml + ar.split(':')[1] + bhtml, 'mCode': m_shtml + ar.split(':')[0] + ' : ' + m_fhtml + ar.split(':')[1] + m_bhtml})
+						}
+						
+        			}else{
+        				var textString = $scope.formText.split(':')[0]
+        				var textP = $scope.formText.split(':')[1]
+    					$scope.code.push({'type': $scope.selectType, 'code': shtml + textString + ' : ' + fhtml + textP + bhtml, 'mCode': m_shtml + textString + ' : ' + m_fhtml + textP + m_bhtml})
+            		}
+				}else if($scope.selectType.includes('Tip')){
+					var shtml = $scope.pcHtmlType[$scope.selectType].split('^')[0];
+					var fhtml = $scope.pcHtmlType[$scope.selectType].split('^')[1].split('~')[0];
+					var bhtml = $scope.pcHtmlType[$scope.selectType].split('^')[1].split('~')[1];
+
+					var m_shtml = $scope.mobileHtmlType[$scope.selectType].split('^')[0];
+					var m_fhtml = $scope.mobileHtmlType[$scope.selectType].split('^')[1].split('~')[0];
+					var m_bhtml = $scope.mobileHtmlType[$scope.selectType].split('^')[1].split('~')[1];
+					
+    				var textString = $scope.formText.split(':')[0]
+    				var textP = $scope.formText.split(':')[1]
+					if(!$scope.formText.includes(':')){
+						alert('옵션 항목 형식이 아닙니다.')
+						return 0;
+					}
+					$scope.code.push({'type': $scope.selectType, 'code': shtml + textString + fhtml + textP + bhtml, 'mCode': m_shtml + textString + m_fhtml + textP + m_bhtml})
+				}else if($scope.selectType == '이미지옵션항목'){
+					var shtml = $scope.pcHtmlType[$scope.selectType].split('^')[0];
+					var fhtml = $scope.pcHtmlType[$scope.selectType].split('^')[1].split('~')[0];
+					var bhtml = $scope.pcHtmlType[$scope.selectType].split('^')[1].split('~')[1];
+
+					var m_shtml = $scope.mobileHtmlType[$scope.selectType].split('^')[0];
+					var m_fhtml = $scope.mobileHtmlType[$scope.selectType].split('^')[1].split('~')[0];
+					var m_bhtml = $scope.mobileHtmlType[$scope.selectType].split('^')[1].split('~')[1];
+					
+					if($scope.formTextsub == undefined){
+    					$scope.code.push({'type': $scope.selectType, 'code':'<div style="clear:both">' + shtml + $scope.imageURL($scope.selectImageType) + fhtml + $scope.formText + bhtml + '</div><div style="clear:both"></div>', 'mCode':'<div style="clear:both">' + m_shtml + $scope.imageURL($scope.selectImageType) + m_fhtml + $scope.formText + m_bhtml + '</div><div style="clear:both"></div>'})
+					}else{
+						$scope.code.push({'type': $scope.selectType, 'code':'<div style="clear:both">' + shtml + $scope.imageURL($scope.selectImageType) + fhtml + $scope.formText + bhtml + shtml + $scope.imageURL($scope.selectImageType2) + fhtml + $scope.formTextsub + bhtml + '</div><div style="clear:both"></div>', 'mCode':'<div style="clear:both">' + m_shtml + $scope.imageURL($scope.selectImageType) + m_fhtml + $scope.formText + m_bhtml + m_shtml + $scope.imageURL($scope.selectImageType2) + m_fhtml + $scope.formTextsub + m_bhtml + '</div><div style="clear:both"></div>'})
+					}
+				}else{
+            		$scope.code.push({'type': $scope.selectType, 'code': $scope.pcHtmlType[$scope.selectType].split('~')[0] + $scope.formText + $scope.pcHtmlType[$scope.selectType].split('~')[1], 'mCode': $scope.mobileHtmlType[$scope.selectType].split('~')[0] + $scope.formText + $scope.mobileHtmlType[$scope.selectType].split('~')[1]})
+				}
+				
+			}else{
+				if($scope.selectType.includes('섹션타이틀')){
+					$scope.code.splice(parseInt($scope.selectNum), 1, {'type': $scope.selectType, 'code': $scope.pcHtmlType[$scope.selectType], 'mCode': $scope.mobileHtmlType[$scope.selectType]})
+				}else if($scope.selectType =='옵션항목'){
+					var shtml = $scope.pcHtmlType[$scope.selectType].split('^')[0];
+					var fhtml = $scope.pcHtmlType[$scope.selectType].split('^')[1].split('~')[0];
+					var bhtml = $scope.pcHtmlType[$scope.selectType].split('^')[1].split('~')[1];
+
+					var m_shtml = $scope.mobileHtmlType[$scope.selectType].split('^')[0];
+					var m_fhtml = $scope.mobileHtmlType[$scope.selectType].split('^')[1].split('~')[0];
+					var m_bhtml = $scope.mobileHtmlType[$scope.selectType].split('^')[1].split('~')[1];
+					if(!$scope.formText.includes(':')){
+						alert('옵션 항목 형식이 아닙니다.')
+						return 0;
+					}
+        			var textString = $scope.formText.split(':')[0]
+        			var textP = $scope.formText.split(':')[1]
+    				$scope.code.splice($scope.selectNum, 1, {'type': $scope.selectType, 'code': shtml + textString + ' : ' + fhtml + textP + bhtml, 'mCode': m_shtml + textString + ' : ' + m_fhtml + textP + m_bhtml})
+				}else if($scope.selectType.includes('Tip')){
+					var shtml = $scope.pcHtmlType[$scope.selectType].split('^')[0];
+					var fhtml = $scope.pcHtmlType[$scope.selectType].split('^')[1].split('~')[0];
+					var bhtml = $scope.pcHtmlType[$scope.selectType].split('^')[1].split('~')[1];
+
+					var m_shtml = $scope.mobileHtmlType[$scope.selectType].split('^')[0];
+					var m_fhtml = $scope.mobileHtmlType[$scope.selectType].split('^')[1].split('~')[0];
+					var m_bhtml = $scope.mobileHtmlType[$scope.selectType].split('^')[1].split('~')[1];
+					
+    				var textString = $scope.formText.split(':')[0]
+    				var textP = $scope.formText.split(':')[1]
+					if(!$scope.formText.includes(':')){
+						alert('옵션 항목 형식이 아닙니다.')
+						return 0;
+					}
+    				var textString = $scope.formText.split(':')[0]
+    				var textP = $scope.formText.split(':')[1]
+
+					$scope.code.splice($scope.selectNum, 1,{'type': $scope.selectType, 'code': shtml + textString + fhtml + textP + bhtml, 'mCode': m_shtml + textString + m_fhtml + textP + m_bhtml})
+				}else if($scope.selectType == '이미지옵션항목'){
+					var shtml = $scope.pcHtmlType[$scope.selectType].split('^')[0];
+					var fhtml = $scope.pcHtmlType[$scope.selectType].split('^')[1].split('~')[0];
+					var bhtml = $scope.pcHtmlType[$scope.selectType].split('^')[1].split('~')[1];
+
+					var m_shtml = $scope.mobileHtmlType[$scope.selectType].split('^')[0];
+					var m_fhtml = $scope.mobileHtmlType[$scope.selectType].split('^')[1].split('~')[0];
+					var m_bhtml = $scope.mobileHtmlType[$scope.selectType].split('^')[1].split('~')[1];
+				
+					if($scope.formTextsub == undefined){
+						$scope.code.splice($scope.selectNum, 1, {'type': $scope.selectType, 'code':'<div style="clear:both">' + shtml + $scope.imageURL($scope.selectImageType) + fhtml + $scope.formText + bhtml + '</div><div style="clear:both"></div>', 'mCode':'<div style="clear:both">' + m_shtml + $scope.imageURL($scope.selectImageType) + m_fhtml + $scope.formText + m_bhtml + '</div><div style="clear:both"></div>'})
+					}else{
+						$scope.code.splice($scope.selectNum, 1, {'type': $scope.selectType, 'code':'<div style="clear:both">' + shtml + $scope.imageURL($scope.selectImageType) + fhtml + $scope.formText + bhtml + shtml + $scope.imageURL($scope.selectImageType2) + fhtml + $scope.formTextsub + bhtml + '</div><div style="clear:both"></div>', 'mCode':'<div style="clear:both">' + m_shtml + $scope.imageURL($scope.selectImageType) + m_fhtml + $scope.formText + m_bhtml + m_shtml + $scope.imageURL($scope.selectImageType2) + m_fhtml + $scope.formTextsub + m_bhtml + '</div><div style="clear:both"></div>'})
+					}
+				}else{
+    				$scope.code.splice($scope.selectNum, 1, {'type': $scope.selectType, 'code': $scope.pcHtmlType[$scope.selectType].split('~')[0] + $scope.formText + $scope.pcHtmlType[$scope.selectType].split('~')[1], 'mCode': $scope.mobileHtmlType[$scope.selectType].split('~')[0] + $scope.formText + $scope.mobileHtmlType[$scope.selectType].split('~')[1]})
+				}
+			}
+
+			// form 초기화
+			$scope.selectImageType2 = '';
+			$scope.selectType = ''
+			$scope.formTextsub = ''
+			$scope.formText = ''
+		}
+
+		$scope.imageURL = function(n){
+			switch(n){
+				case '성분':
+					return '/lib/img/form/check_1.png';
+				case '유통':
+    				return '/lib/img/form/check_2.png';
+				case '활용법':
+    				return'/lib/img/form/check_3.png';
+				case '브랜드':
+					return'/lib/img/form/check_4.png';
+    			default : return''
+			}
+		}
+		
+		$scope.imageDURL = function(n){
+			switch(n){
+				case '/lib/img/form/check_1.png':
+					return '성분';
+				case '/lib/img/form/check_2.png':
+    				return '유통';
+				case '/lib/img/form/check_3.png':
+    				return '활용법';
+				case '/lib/img/form/check_4.png':
+					return'브랜드';
+    			default : return''
+			}
+		}
+
+		// el 선택 이벤트
+		$scope.editor = function($event, i){
+			if($scope.updateMode == true){
+				return 0;
+			}
+			if($scope.selectNum == null){
+    			$event.currentTarget.style.border = '1px solid red'
+    			$scope.selectNum = i
+			}else if($scope.selectNum == i){
+				$('.preview_group').css('border', '0px')
+				$scope.selectNum = null
+			}else{
+    			$('.preview_group').css('border', '0px')
+    			$event.currentTarget.style.border = '1px solid red'
+    			$scope.selectNum = i
+			}
+		}
+
+		// 삭제 이벤트
+		$scope.deleteHtml = function(){
+			if($scope.selectNum != null){
+				$scope.code.splice($scope.selectNum, 1)
+				$scope.selectImageType2 = ''
+				$scope.selectType = ''
+				$scope.formTextsub = ''
+				$scope.formText = ''
+			}
+		}
+
+		// 수정 항목 form 매칭
+		$scope.handleUpdateHtml = function(){
+			if($scope.selectNum != null){
+				$scope.updateMode = true;
+				if($scope.code[$scope.selectNum]['type'] == '옵션항목'){
+					$scope.formText = $scope.code[$scope.selectNum]['code'].split('<strong>')[1].split('</strong>')[0] + $scope.code[$scope.selectNum]['code'].split('<strong>')[1].split('</strong>')[1].split('<')[0]
+					$scope.selectType = $scope.code[$scope.selectNum]['type']
+					return 0;
+				}
+				if($scope.code[$scope.selectNum]['type'].includes('Tip')){
+					$scope.formText = $scope.code[$scope.selectNum]['code'].split('<h3')[1].split('>')[1].split('</')[0] + ':' + $scope.code[$scope.selectNum]['code'].split('<p')[1].split('>')[1].split('</p')[0]
+					$scope.selectType = $scope.code[$scope.selectNum]['type']
+					return 0;
+				}
+				if($scope.code[$scope.selectNum]['type'] =='이미지'){
+					$scope.formText = $scope.code[$scope.selectNum]['code'].split('src="')[1].split('"')[0]
+					$scope.selectType = $scope.code[$scope.selectNum]['type']
+					return 0;
+				}
+				if($scope.code[$scope.selectNum]['type'] == '이미지옵션항목'){
+					console.log('실행')
+					$scope.formText = $scope.code[$scope.selectNum]['code'].split('<p')[1].split('>')[1].split('</')[0]
+					$scope.formTextsub = $scope.code[$scope.selectNum]['code'].split('</div>')[1].split('<p')[1].split('>')[1].split('</')[0]
+					$scope.selectType = $scope.code[$scope.selectNum]['type']
+					$scope.selectImageType = $scope.imageDURL($scope.code[$scope.selectNum]['code'].split('c="')[1].split('"')[0])
+					$scope.selectImageType2 = $scope.imageDURL($scope.code[$scope.selectNum]['code'].split('</div>')[1].split('c="')[1].split('"')[0])
+					return 0;
+				}
+				$scope.formText = $scope.code[$scope.selectNum]['code'].split('>')[1].split('<')[0]
+				$scope.selectType = $scope.code[$scope.selectNum]['type']
+			}
+		}
+
+		// 수정 이벤트 
+		$scope.updateHtml = function(){
+			if($scope.selectNum != null){
+    			$scope.transformation();
+    			$scope.updateMode = false;
+			}
+		}
+
+		// 수정 취소 이벤
+		$scope.cancel = function(){
+			$scope.selectImageType2 = '';
+			$scope.selectType = ''
+			$scope.formTextsub = ''
+			$scope.formText = ''
+			$scope.updateMode = false;
+		}
+
+		// code 복사
+		$scope.pcHtmlCopy = function(h){
+			var tempEl =  document.createElement('textarea')
+			var sucessCode = ''
+			if(h == 'P'){
+    			for(var c of $scope.code){
+    				sucessCode += c['code'] 
+    			}
+    			tempEl.value = sucessCode
+    			document.body.appendChild(tempEl)
+    
+    			tempEl.select()
+    			document.execCommand('Copy')
+    			document.body.removeChild(tempEl)
+			}else if(h == 'M'){
+    			for(var c of $scope.code){
+    				sucessCode += c['mCode'] 
+    			}
+    			tempEl.value = sucessCode
+    			document.body.appendChild(tempEl)
+    
+    			tempEl.select()
+    			document.execCommand('Copy')
+    			document.body.removeChild(tempEl)
+			}
+		}	
+	});
+</script>
+</html>
