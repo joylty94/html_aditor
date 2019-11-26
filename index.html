@@ -34,7 +34,14 @@
 </head>
 <body ng-controller="uiController">
 
-	<style>
+<style>
+html{
+    height: 100%
+}
+body{
+    width: 100%;
+    height: 100%
+}
 .cell {
 	position: relative; box-sizing: border-box; padding: 0 50px
 }
@@ -82,18 +89,26 @@
 }
 
 .container {
-	width: 1450px; margin: 0 auto;
+	width: 100%;
+	height: 100%;
+	position: relative;
+	padding: 0 50px;
 }
 
 .left {
-	width: 1062px; float: left
+	width: 1062px; position: absolute;
+	top:0;
+	bottom:0;
+	z-index: 10;
 }
 
 .right {
-	width: 350px; float: left;
+	min-width: 350px;
+	max-width: 600px;
     position: fixed;
     top: 5px;
-    right: 5%;
+    left: 1180px;
+    right:50px;
 }
 
 fieldset {
@@ -133,18 +148,17 @@ fieldset select, fieldset textarea {
     padding: 0 2px;
 }
 
-@media only screen and (max-width: 1550px) {
+@media only screen and (max-width: 1600px) {
     .container{
-        margin: 0px;
+        margin: 0;
+        padding: 0;
     }
     .right{
-        right: 2%;
+        left: 1080px;
     }
+
 }
 @media only screen and (max-width: 1500px) {
-    .right{
-        position: unset;
-    }
 }
 </style>
 
@@ -319,7 +333,7 @@ fieldset select, fieldset textarea {
 				</fieldset>
 				<fieldset>
 					<button type="submit" class="btn">저장</button>
-					<button type="submit" class="htmlDataDelete()">삭제</button>
+					<button type="button" ng-click="htmlDataDelete()">삭제</button>
 				</fieldset>
 
 			</form>
@@ -422,10 +436,10 @@ app.controller('uiController', function ($scope,$http,api) {
      }
 
      $scope.htmlDataDelete = function(){
-
+		console.log('1111' + $scope.target)
          var dataVal = { mode : "remove", index : $scope.target, no : $scope.no }
          api.dataLoad("/form/data",$.param(dataVal)).then(function(response){
-            //console.log(response);
+            console.log(response);
    		    if(!response.result){
                  alert(response.error);
                  //location.href= "/";
@@ -534,15 +548,11 @@ app.controller('uiController', function ($scope,$http,api) {
      
      $scope.copy = function(){
         var a = $.makeArray($('.inner')[0]['outerHTML'])
-        console.log(a)
-    	console.log($('.inner'))
-       	console.log($('.inner').toArray())
         var sucessCode = ''
        	for(var i of $('.inner').toArray()){
-            	console.log(i.html)
         		sucessCode += i['outerHTML'];
          }
-        console.log(sucessCode)
+
  		var tempEl =  document.createElement('textarea')
      	tempEl.value = sucessCode
      	document.body.appendChild(tempEl)
