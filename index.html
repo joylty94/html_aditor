@@ -1,223 +1,335 @@
 <!DOCTYPE html>
 <html lang="ko" ng-app="app" ng-cloak>
-<head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="keywords" content="">
-<meta name="description" content="">
-<meta name="author" content="">
-<meta name="site_name" content="">
-<meta property="og:type" content="">
-<meta property="og:title" content="">
-<meta property="og:description" content="">
-<meta property="og:image" content="">
-<meta property="og:url" content="">
-<!-- 위 3개의 메타 태그는 *반드시* head 태그의 처음에 와야합니다; 어떤 다른 콘텐츠들은 반드시 이 태그들 *다음에* 와야 합니다 -->
-<title></title>
 
-<!-- 부트스트랩 -->
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:400,500,700&display=swap" rel="stylesheet">
-<!-- IE8 에서 HTML5 요소와 미디어 쿼리를 위한 HTML5 shim 와 Respond.js -->
-<!-- WARNING: Respond.js 는 당신이 file:// 을 통해 페이지를 볼 때는 동작하지 않습니다. -->
-<!--[if lt IE 9]>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<meta name="site_name" content="">
+	<meta property="og:type" content="">
+	<meta property="og:title" content="">
+	<meta property="og:description" content="">
+	<meta property="og:image" content="">
+	<meta property="og:url" content="">
+	<!-- 위 3개의 메타 태그는 *반드시* head 태그의 처음에 와야합니다; 어떤 다른 콘텐츠들은 반드시 이 태그들 *다음에* 와야 합니다 -->
+	<title></title>
+
+	<!-- 부트스트랩 -->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:400,500,700&display=swap" rel="stylesheet">
+	<!-- IE8 에서 HTML5 요소와 미디어 쿼리를 위한 HTML5 shim 와 Respond.js -->
+	<!-- WARNING: Respond.js 는 당신이 file:// 을 통해 페이지를 볼 때는 동작하지 않습니다. -->
+	<!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-<!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요합니다) -->
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular-sanitize.js"></script>
+	<!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요합니다) -->
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular-sanitize.js"></script>
 </head>
+
 <body ng-controller="uiController">
 
-<style>
-html{
-    height: 100%
-}
-body{
-    width: 100%;
-    height: 100%
-}
-.cell {
-	position: relative; box-sizing: border-box; padding: 0 50px
-}
+	<style>
+		html {
+			height: 100%
+		}
 
-.Mcell{
-	position: relative; box-sizing: border-box; padding: 0 340px
-}
+		body {
+			width: 100%;
+			height: 100%
+		}
 
-.cell .inner, .Mcell .inner {
-	cursor: pointer; 
-	/*border: 1px dotted #ddd;*/
-	box-sizing: border-box;
-}
+		.cell {
+			position: relative;
+			box-sizing: border-box;
+			padding: 0 50px
+		}
 
-.cell .config {
-	position: absolute; top: 0; right: 0; width: 30px
-}
+		.Mcell {
+			position: relative;
+			box-sizing: border-box;
+			padding: 0 340px
+		}
 
-.Mcell .config {
-	position: absolute; top: 0; right: 305px;
-	width:30px;
-}
+		.cell .inner,
+		.Mcell .inner {
+			cursor: pointer;
+			/*border: 1px dotted #ddd;*/
+			box-sizing: border-box;
+		}
 
-.cell .config span {
-	display: block; width: 30px; height: 28px; background: #fafafa; text-align: center; line-height: 35px; cursor: pointer
-}
+		.cell .config {
+			position: absolute;
+			top: 0;
+			right: 0;
+			width: 30px
+		}
 
-.Mcell .config span {
-	display: inline-block; width: 30px; height: 28px; background: #fafafa; text-align: center; line-height: 35px; cursor: pointer;
-	margin-left: -3px;
-}
+		.Mcell .config {
+			position: absolute;
+			top: 0;
+			right: 305px;
+			width: 30px;
+		}
 
-.cell .config span:hover, .Mcell .config span:hover {
-	background: #eee
-}
+		.cell .config span {
+			display: block;
+			width: 30px;
+			height: 28px;
+			background: #fafafa;
+			text-align: center;
+			line-height: 35px;
+			cursor: pointer
+		}
+
+		.Mcell .config span {
+			display: inline-block;
+			width: 30px;
+			height: 28px;
+			background: #fafafa;
+			text-align: center;
+			line-height: 35px;
+			cursor: pointer;
+			margin-left: -3px;
+		}
+
+		.cell .config span:hover,
+		.Mcell .config span:hover {
+			background: #eee
+		}
 
 
-.cell .config span .material-icons, .Mcell .config span .material-icons {
-	font-size: 20px
-}
+		.cell .config span .material-icons,
+		.Mcell .config span .material-icons {
+			font-size: 20px
+		}
 
-.cell .inner.active, .Mcell .inner.active {
-	border: 2px dotted red;
-	margin: 0 -1px;
-}
+		.cell .inner.active,
+		.Mcell .inner.active {
+			border: 2px dotted red;
+			margin: 0 -1px;
+		}
 
-.container {
-	width: 100%;
-	height: 100%;
-	position: relative;
-	padding: 0 50px;
-}
+		.container {
+			width: 100%;
+			height: 100%;
+			position: relative;
+			padding: 0 50px;
+		}
 
-.left {
-	width: 1062px; position: absolute;
-	top:0;
-	bottom:0;
-	z-index: 10;
-}
+		.left {
+			width: 1062px;
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			z-index: 10;
+		}
 
-.right {
-	min-width: 350px;
-	max-width: 600px;
-    position: fixed;
-    top: 5px;
-    left: 1180px;
-    right:50px;
-}
+		.right {
+			min-width: 350px;
+			max-width: 600px;
+			position: fixed;
+			top: 5px;
+			left: 1180px;
+			right: 50px;
+			border: 1px solid #ccc;
+			box-sizing: border-box;
+			padding: 10px;
+		}
 
-fieldset {
-	border: 0; box-sizing: border-box
-}
+		fieldset {
+			border: 0;
+			box-sizing: border-box
+		}
 
-fieldset label {
-	display: block; margin-bottom: 5px; box-sizing: border-box; font-weight: bold
-}
+		fieldset label {
+			display: block;
+			margin-bottom: 5px;
+			box-sizing: border-box;
+			font-weight: bold
+		}
 
-fieldset select, fieldset textarea {
-	display: block; padding: 5px 10px; width: 100%; box-sizing: border-box; font-size: 14px; resize: none
-}
+		fieldset select,
+		fieldset textarea {
+			display: block;
+			padding: 5px 10px;
+			width: 100%;
+			box-sizing: border-box;
+			font-size: 14px;
+			resize: none
+		}
 
-.text-center {
-	text-align: center
-}
+		.text-center {
+			text-align: center
+		}
 
-.add {
-	margin-top: 50px
-}
+		.add {
+			margin-top: 50px
+		}
 
-.add span {
-	display: inline-block; padding: 15px; background: #eee; text-align: center; cursor: pointer; border-radius: 100px
-}
+		.add span {
+			display: inline-block;
+			padding: 15px;
+			background: #eee;
+			text-align: center;
+			cursor: pointer;
+			border-radius: 100px
+		}
 
-.add span :hover {
-	background: #ddd
-}
+		.add span :hover {
+			background: #ddd
+		}
 
-.add span .material-icons {
-	font-size: 30px; color: #aaa
-}
-.explain{
-    font-size: 14px;
-    color: #373737;
-    padding: 0 2px;
-}
+		.add span .material-icons {
+			font-size: 30px;
+			color: #aaa
+		}
 
-@media only screen and (max-width: 1600px) {
-    .container{
-        margin: 0;
-        padding: 0;
-    }
-    .right{
-        left: 1080px;
-    }
+		.explain strong {
+			font-size: 16px;
+		}
 
-}
-@media only screen and (max-width: 1500px) {
-}
-</style>
+		.explain {
+			font-size: 14px;
+			color: #373737;
+		}
 
+		@media only screen and (max-width: 1600px) {
+			.container {
+				margin: 0;
+				padding: 0;
+			}
+
+			.right {
+				left: 1080px;
+			}
+
+		}
+
+		@media only screen and (max-width: 1500px) {}
+	</style>
 	<div class="container">
 		<div class="left">
 			<div class="cell" ng-if="mode == 'pc'" ng-repeat="data in htmlData" data-index="{{$index}}">
 				<div class="inner" ng-click="htmlDataClick($index)" ng-class="{ active : target == $index }">
 					<h3 ng-if="data.type == '1'"
-						style="font-family:'Noto Sans';font-size:24px;padding-bottom:14px;line-height:15px;color:#666;padding-top:75px;text-align:center;margin:0">{{data.contents}}</h3>
+						style="font-family:'Noto Sans';font-size:24px;padding-bottom:14px;line-height:15px;color:#666;padding-top:75px;text-align:center;margin:0">
+						{{data.contents}}</h3>
 					<h2 ng-if="data.type == '2'"
-						style="font-family:'Noto Sans';padding-bottom:35px;font-size:38px;line-height:46px;text-align: center;border-bottom: 1px solid #c1c1c1;color: #666;margin:0;font-weight:700;">{{data.contents}}</h2>
+						style="font-family:'Noto Sans';padding-bottom:35px;font-size:38px;line-height:46px;text-align: center;border-bottom: 1px solid #c1c1c1;color: #666;margin:0;font-weight:700;">
+						{{data.contents}}</h2>
 					<p ng-if="data.type == '3'"
-						style="font-family:'Noto Sans';padding: 28px 0 0;font-size:18px;line-height: 32px;color: #373737;text-align:left;margin:0;white-space: pre-wrap;word-break: break-all;">{{data.contents}}</p>
-					<img ng-if="data.type == '4'"
-					 	ng-src="{{data.contents}}" style="width:100%"/>
-					<div ng-if="data.type == '5'"
-						style="position: relative"><h2 style="font-family:'Noto Sans';color:#656565;line-height: 50px;display: inline-block;text-align:center;z-index: 10;font-size: 50px;width: 100%;margin-bottom: 70px;margin-top: 170px;font-weight: 700;color: #666;"><span style="position: relative;z-index: 10;display: inline-block;padding: 0 15px;background: #fff;">Secret Check Point</span><span style="position: absolute;z-index: 1;top: 194px;width: 100%;height: 1px;background: #b9b9b9;left: 0;"></span></h2></div>
+						style="font-family:'Noto Sans';padding: 28px 0 0;font-size:18px;line-height: 32px;color: #373737;text-align:left;margin:0;white-space: pre-wrap;word-break: break-all;">
+						{{data.contents}}</p>
+					<img ng-if="data.type == '4'" ng-src="{{data.contents}}" style="width:100%" />
+					<div ng-if="data.type == '5'" style="position: relative">
+						<h2
+							style="font-family:'Noto Sans';color:#656565;line-height: 50px;display: inline-block;text-align:center;z-index: 10;font-size: 50px;width: 100%;margin-bottom: 70px;margin-top: 170px;font-weight: 700;color: #666;">
+							<span
+								style="position: relative;z-index: 10;display: inline-block;padding: 0 15px;background: #fff;">Secret
+								Check Point</span><span
+								style="position: absolute;z-index: 1;top: 194px;width: 100%;height: 1px;background: #b9b9b9;left: 0;"></span>
+						</h2>
+					</div>
 					<div ng-if="data.type == '6'" style="clear:both">
 						<div style="float:left;width:50%;padding-right:50px;box-sizing:border-box;">
-    						<img ng-src="{{imgPath(endPattern(data.contents)[0])}}" style=""/>
-    						<div style="margin-bottom:30px;margin-top:15px;">    						
-        						<p style="font-family:'Noto Sans';font-size: 18px;line-height: 32px;color: #474747;margin:0;" ng-repeat="p in enterPattern(endPattern(data.contents)[0].slice(1)) track by $index">{{p}}</p>
-    						</div>
+							<img ng-src="{{imgPath(endPattern(data.contents)[0])}}" style="height:65px" />
+							<div style="margin-bottom:50px;margin-top:10px;padding-left: 4px;">
+								<p style="font-family:'Noto Sans';font-size: 18px;line-height: 30px;color: #474747;margin:0;"
+									ng-repeat="p in enterPattern(endPattern(data.contents)[0].slice(1)) track by $index">
+									{{p}}</p>
+							</div>
 						</div>
-						<div ng-if="endPattern(data.contents)[1]" style="float:left;width:50%;padding-right:50px;box-sizing:border-box;">
-    						<img ng-src="{{imgPath(endPattern(data.contents)[1])}}" style=""/>
-    						<div style="margin-bottom:30px;margin-top:15px;">    						
-        						<p style="font-family:'Noto Sans';font-size: 18px;line-height: 32px;color: #474747;margin:0;" ng-repeat="p in enterPattern(enterDelete(endPattern(data.contents)[1]).slice(1)) track by $index">{{p}}</p>
-   
-    						</div>
+						<div ng-if="endPattern(data.contents)[1]"
+							style="float:left;width:50%;padding-right:50px;box-sizing:border-box;">
+							<img ng-src="{{imgPath(endPattern(data.contents)[1])}}" style="height:65px" />
+							<div style="margin-bottom:50px;margin-top:10px;padding-left: 4px;">
+								<p style="font-family:'Noto Sans';font-size: 18px;line-height: 30px;color: #474747;margin:0;"
+									ng-repeat="p in enterPattern(enterDelete(endPattern(data.contents)[1]).slice(1)) track by $index">
+									{{p}}</p>
+							</div>
 						</div>
 						<div style="clear:both"></div>
-						<div ng-if="endPattern(data.contents)[2]" style="float:left;width:50%;padding-right:50px;box-sizing:border-box;">
-    						<img ng-src="{{imgPath(endPattern(data.contents)[2])}}" style=""/>
-    						<div style="margin-bottom:30px;margin-top:15px;">    						
-        						<p style="font-family:'Noto Sans';font-size: 18px;line-height: 32px;color: #474747;margin:0;" ng-repeat="p in enterPattern(enterDelete(endPattern(data.contents)[2]).slice(1)) track by $index">{{p}}</p>
-    						</div>
+						<div ng-if="endPattern(data.contents)[2]"
+							style="float:left;width:50%;padding-right:50px;box-sizing:border-box;">
+							<img ng-src="{{imgPath(endPattern(data.contents)[2])}}" style="height:65px" />
+							<div style="margin-bottom:50px;margin-top:10px;padding-left: 4px;">
+								<p style="font-family:'Noto Sans';font-size: 18px;line-height: 30px;color: #474747;margin:0;"
+									ng-repeat="p in enterPattern(enterDelete(endPattern(data.contents)[2]).slice(1)) track by $index">
+									{{p}}</p>
+							</div>
 						</div>
-						<div ng-if="endPattern(data.contents)[3]" style="float:left;width:50%;padding-right:50px;box-sizing:border-box;">
-    						<img ng-src="{{imgPath(endPattern(data.contents)[3])}}" style=""/>
-    						<div style="margin-bottom:30px;margin-top:15px;">    						
-        						<p style="font-family:'Noto Sans';font-size: 18px;line-height: 32px;color: #474747;margin:0;" ng-repeat="p in enterPattern(enterDelete(endPattern(data.contents)[3]).slice(1)) track by $index">{{p}}</p>
-    						</div>
+						<div ng-if="endPattern(data.contents)[3]"
+							style="float:left;width:50%;padding-right:50px;box-sizing:border-box;">
+							<img ng-src="{{imgPath(endPattern(data.contents)[3])}}" style="height:65px" />
+							<div style="margin-bottom:50px;margin-top:10px;padding-left: 4px;">
+								<p style="font-family:'Noto Sans';font-size: 18px;line-height: 30px;color: #474747;margin:0;"
+									ng-repeat="p in enterPattern(enterDelete(endPattern(data.contents)[3]).slice(1)) track by $index">
+									{{p}}</p>
+							</div>
 						</div>
 						<div style="clear:both"></div>
 					</div>
-					<div ng-if="data.type == '7'" style="position: relative"><h2 style="font-family:'Noto Sans';line-height: 50px;color:#656565;display: inline-block;text-align: center;z-index: 10;font-size: 50px;width: 100%;margin-bottom: 70px;margin-top: 170px;font-weight: 700;color: #666;"><span style="position: relative;z-index: 10;display: inline-block;padding: 0 15px;background: #fff;">Secret Pick</span><span style="position: absolute;z-index: 1;top: 194px;width: 100%;height: 1px;background: #b9b9b9;left: 0;"></span></h2></div>
-					<h3 ng-if="data.type == '8'" style="font-family:'Noto Sans';font-size: 30px;padding: 55px 0 20px;line-height: 38px;color: #373737;margin:0;">{{data.contents}}</h3>
-					<div ng-if="data.type == '9'">					
-    					<p style="font-family:'Noto Sans';font-size: 18px;line-height: 32px;color: #373737; margin:0;" ng-repeat="enter in enterPattern(data.contents)">
-    						<strong>{{enter.split(':')[0]}} : </strong>{{enter.split(':')[1]}}
-    					</p>
+					<div ng-if="data.type == '7'" style="position: relative">
+						<h2
+							style="font-family:'Noto Sans';line-height: 50px;color:#656565;display: inline-block;text-align: center;z-index: 10;font-size: 50px;width: 100%;margin-bottom: 70px;margin-top: 170px;font-weight: 700;color: #666;">
+							<span
+								style="position: relative;z-index: 10;display: inline-block;padding: 0 15px;background: #fff;">Secret
+								Pick</span><span
+								style="position: absolute;z-index: 1;top: 194px;width: 100%;height: 1px;background: #b9b9b9;left: 0;"></span>
+						</h2>
+					</div>
+					<h3 ng-if="data.type == '8'"
+						style="font-family:'Noto Sans';font-size: 30px;padding: 0 0 20px;line-height: 38px;color: #373737;margin:0;">
+						{{data.contents}}</h3>
+					<div ng-if="data.type == '9'" style="overflow:hidden">
+						<ul style="list-style:none;padding-left:10px;margin:0;">
+							<li ng-if="$index == 0"
+								style="font-family:'Noto Sans';font-size: 18px;line-height: 32px;margin:0 0 10px 0;color:#f96500;position:relative"
+								ng-repeat="enter in enterPattern2(data.contents)">
+								<span style="position:absolute;top:0;left:-15px;">・</span>
+								<strong ng-if="$index == 0" style="color:#f96500">{{enter.split(':')[0]}} : </strong>
+								<span style="color:#373737">{{enter.split(':')[1]}}</span>
+							</li>
+							<li ng-if="$index != 0"
+								style="font-family:'Noto Sans';font-size: 18px;line-height: 32px;margin:0 0 10px 0;color:#373737;position:relative"
+								ng-repeat="enter in enterPattern2(data.contents)">
+								<span style="position:absolute;top:0;left:-15px;">・</span>
+								<strong>{{enter.split(':')[0]}} : </strong>
+								<span>{{enter.split(':')[1]}}</span>
+							</li>
+						</ul>
 					</div>
 					<div ng-if="data.type == '10'" style="padding: 170px 0;">
-						<h2 style="font-family:'Noto Sans';position: relative;z-index: 10;background: #fff;display: inline-block;font-size: 36px;line-height:36px;padding:0 10px;margin: 0 0 0 48px;font-weight: 700;color: #666;text-shadow: 0 0;letter-spacing: 1px;">Secret Tip</h2>
+						<h2
+							style="font-family:'Noto Sans';position: relative;z-index: 10;background: #fff;display: inline-block;font-size: 36px;line-height:36px;padding:0 10px;margin: 0 0 0 48px;font-weight: 700;color: #666;text-shadow: 0 0;letter-spacing: 1px;">
+							Secret Tip</h2>
 						<div style="margin-top: -22px;border: 1px solid #b9b9b9;padding: 60px 62px;">
-							<h3 style="font-family:'Noto Sans';display: block;font-size: 25px;line-height: 38px;margin:  0 0 10px 0;padding:0;">{{data.contents.split(':')[0]}}</h3>
-							<p style="font-family:'Noto Sans';margin: 0;font-size: 18px;line-height: 32px;white-space: pre-wrap;">{{data.contents.split(':')[1]}}</p>
+							<h3
+								style="font-family:'Noto Sans';display: block;font-size: 25px;line-height: 38px;margin:  0 0 10px 0;padding:0;">
+								{{data.contents.split(':')[0]}}</h3>
+							<p
+								style="font-family:'Noto Sans';margin: 0;font-size: 18px;line-height: 32px;white-space: pre-wrap;">
+								{{data.contents.split(':')[1]}}</p>
 						</div>
+					</div>
+					<div ng-if="data.type == '11'" ng-style="{ padding : data.contents / 2 }">
+					</div>
+					<div ng-if="data.type == '12'">
+						<iframe width="100%" height="100%" style="min-height:500px;"
+							ng-src="{{setProject(data.contents)}}" frameborder="0"
+							allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+							allowfullscreen></iframe>
+					</div>
+					<div ng-if="data.type == '13'" id="info_img">
+						<img ng-src="{{data.contents}}" style="width:100%" />
 					</div>
 				</div>
 				<div class="config" ng-if="target == $index">
@@ -232,58 +344,114 @@ fieldset select, fieldset textarea {
 			<div class="Mcell" ng-if="mode == 'mobile'" ng-repeat="data in htmlData" data-index="{{$index}}">
 				<div class="inner" ng-click="htmlDataClick($index)" ng-class="{ active : target == $index }">
 					<h3 ng-if="data.type == '1'"
-						style="font-family:'Noto Sans';font-size:20px;padding-bottom:7px;line-height:22px;color:#666;padding-top:48px;text-align:center;margin:0">{{data.contents}}</h3>
+						style="font-family:'Noto Sans';font-size:20px;padding-bottom:7px;line-height:22px;color:#666;padding-top:48px;text-align:center;margin:0">
+						{{data.contents}}</h3>
 					<h2 ng-if="data.type == '2'"
-						style="font-family:'Noto Sans';padding-bottom:24px;font-size:26px;line-height:32px;text-align: center;border-bottom: 1px solid #c1c1c1;color: #666;margin:0;font-weight:700;">{{data.contents}}</h2>
+						style="font-family:'Noto Sans';padding-bottom:24px;font-size:26px;line-height:32px;text-align: center;border-bottom: 1px solid #c1c1c1;color: #666;margin:0;font-weight:700;">
+						{{data.contents}}</h2>
 					<p ng-if="data.type == '3'"
-						style="font-family:'Noto Sans';padding: 24px 0 36px;font-size:14px;line-height: 23px;color: #373737;text-align:left;margin:0;white-space: pre-wrap;word-break: break-all;">{{data.contents}}</p>
-					<img ng-if="data.type == '4'"
-					 	ng-src="{{data.contents}}" style="width:100%"/>
-					<div ng-if="data.type == '5'"
-						style="position: relative"><h2 style="font-family:'Noto Sans';color:#656565;display: inline-block;text-align:center;z-index: 10;font-size: 22.5px;line-height: 22.5px;width: 100%;margin-bottom: 50px;margin-top: 66px;font-weight: 700;color: #666;"><span style="position: relative;z-index: 10;display: inline-block;padding: 0 15px;background: #fff;">Secret Check Point</span><span style="position: absolute;z-index: 1;top: 75px;width: 100%;height: 1px;background: #b9b9b9;left: 0;"></span></h2></div>
+						style="font-family:'Noto Sans';padding: 24px 0 36px;font-size:16px;line-height: 23px;color: #373737;text-align:left;margin:0;white-space: pre-wrap;word-break: break-all;">
+						{{data.contents}}</p>
+					<img ng-if="data.type == '4'" ng-src="{{data.contents}}" style="width:100%" />
+					<div ng-if="data.type == '5'" style="position: relative">
+						<h2
+							style="font-family:'Noto Sans';color:#656565;display: inline-block;text-align:center;z-index: 10;font-size: 22.5px;line-height: 22.5px;width: 100%;margin-bottom: 50px;margin-top: 66px;font-weight: 700;color: #666;">
+							<span
+								style="position: relative;z-index: 10;display: inline-block;padding: 0 15px;background: #fff;">Secret
+								Check Point</span><span
+								style="position: absolute;z-index: 1;top: 75px;width: 100%;height: 1px;background: #b9b9b9;left: 0;"></span>
+						</h2>
+					</div>
 					<div ng-if="data.type == '6'" style="clear:both">
 						<div style="float:left;width:100%;">
-    						<img ng-src="{{imgPath(endPattern(data.contents)[0])}}" style="width:70%"/>
-    						<div style="margin-bottom:25px;margin-top:12px;padding-left:2px;">    						
-        						<p style="font-family: 'Noto Sans';font-size: 14px;line-height: 23px;color: #373737;margin:0;" ng-repeat="p in enterPattern(endPattern(data.contents)[0].slice(1)) track by $index">{{p}}</p>
-    						</div>
+							<img ng-src="{{imgPath(endPattern(data.contents)[0])}}" style="width:250px" />
+							<div style="margin-bottom:25px;margin-top:12px;padding-left:2px;">
+								<p style="font-family: 'Noto Sans';font-size: 16px;line-height: 23px;color: #373737;margin:0;"
+									ng-repeat="p in enterPattern(endPattern(data.contents)[0].slice(1)) track by $index">
+									{{p}}</p>
+							</div>
 						</div>
 						<div ng-if="endPattern(data.contents)[1]" style="float:left;width:100%;box-sizing:border-box;">
-    						<img ng-src="{{imgPath(endPattern(data.contents)[1])}}" style="width:70%"/>
-    						<div style="margin-bottom:25px;margin-top:12px;padding-left:2px;">    						
-        						<p style="font-family: 'Noto Sans';font-size: 14px;line-height: 23px;color: #373737;margin:0;" ng-repeat="p in enterPattern(enterDelete(endPattern(data.contents)[1]).slice(1)) track by $index">{{p}}</p>
-    						</div>
+							<img ng-src="{{imgPath(endPattern(data.contents)[1])}}" style="width:250px" />
+							<div style="margin-bottom:25px;margin-top:12px;padding-left:2px;">
+								<p style="font-family: 'Noto Sans';font-size: 16px;line-height: 23px;color: #373737;margin:0;"
+									ng-repeat="p in enterPattern(enterDelete(endPattern(data.contents)[1]).slice(1)) track by $index">
+									{{p}}</p>
+							</div>
 						</div>
 						<div style="clear:both"></div>
 						<div ng-if="endPattern(data.contents)[2]" style="float:left;width:100%;box-sizing:border-box;">
-    						<img ng-src="{{imgPath(endPattern(data.contents)[2])}}" style="width:70%"/>
-    						<div style="margin-bottom:25px;margin-top:12px;padding-left:2px;">    						
-        						<p style="font-family: 'Noto Sans';font-size: 14px;line-height: 23px;color: #373737;margin:0;" ng-repeat="p in enterPattern(enterDelete(endPattern(data.contents)[2]).slice(1)) track by $index">{{p}}</p>
-    						</div>
+							<img ng-src="{{imgPath(endPattern(data.contents)[2])}}" style="width:250px" />
+							<div style="margin-bottom:25px;margin-top:12px;padding-left:2px;">
+								<p style="font-family: 'Noto Sans';font-size: 16px;line-height: 23px;color: #373737;margin:0;"
+									ng-repeat="p in enterPattern(enterDelete(endPattern(data.contents)[2]).slice(1)) track by $index">
+									{{p}}</p>
+							</div>
 						</div>
 						<div ng-if="endPattern(data.contents)[3]" style="float:left;width:100%;box-sizing:border-box;">
-    						<img ng-src="{{imgPath(endPattern(data.contents)[3])}}" style="width:70%"/>
-    						<div style="margin-bottom:25px;margin-top:12px;padding-left:2px;">    						
-        						<p style="font-family: 'Noto Sans';font-size: 14px;line-height: 23px;color: #373737;margin:0;" ng-repeat="p in enterPattern(enterDelete(endPattern(data.contents)[3]).slice(1)) track by $index">{{p}}</p>
-    						</div>
+							<img ng-src="{{imgPath(endPattern(data.contents)[3])}}" style="width:250px" />
+							<div style="margin-bottom:25px;margin-top:12px;padding-left:2px;">
+								<p style="font-family: 'Noto Sans';font-size: 16px;line-height: 23px;color: #373737;margin:0;"
+									ng-repeat="p in enterPattern(enterDelete(endPattern(data.contents)[3]).slice(1)) track by $index">
+									{{p}}</p>
+							</div>
 						</div>
 						<div style="clear:both"></div>
 					</div>
-					<div ng-if="data.type == '7'" style="position: relative"><h2 style="font-family:'Noto Sans';color:#656565;display: inline-block;text-align:center;z-index: 10;font-size: 22.5px;line-height: 22.5px;width: 100%;margin-bottom: 50px;margin-top: 65px;font-weight: 700;color: #666;"><span style="position: relative;z-index: 10;display: inline-block;padding: 0 15px;background: #fff;">Secret Pick</span><span style="position: absolute;z-index: 1;top: 74px;width: 100%;height: 1px;background: #b9b9b9;left: 0;"></span></h2></div>
-					<h3 ng-if="data.type == '8'" style="font-family: 'Noto Sans';font-size: 18px;padding: 0 0 16px;line-height: 24px;color: #373737;margin:0;">{{data.contents}}</h3>
-					<div ng-if="data.type == '9'">					
-    					<p style="font-family:'Noto Sans';font-size: 14px;line-height: 23px;color: #373737; margin:0;" ng-repeat="enter in enterPattern(data.contents)">
-    						<strong>{{enter.split(':')[0]}} : </strong>{{enter.split(':')[1]}}
-    					</p>
+					<div ng-if="data.type == '7'" style="position: relative">
+						<h2
+							style="font-family:'Noto Sans';color:#656565;display: inline-block;text-align:center;z-index: 10;font-size: 22.5px;line-height: 22.5px;width: 100%;margin-bottom: 50px;margin-top: 65px;font-weight: 700;color: #666;">
+							<span
+								style="position: relative;z-index: 10;display: inline-block;padding: 0 15px;background: #fff;">Secret
+								Pick</span><span
+								style="position: absolute;z-index: 1;top: 74px;width: 100%;height: 1px;background: #b9b9b9;left: 0;"></span>
+						</h2>
+					</div>
+					<h3 ng-if="data.type == '8'"
+						style="font-family: 'Noto Sans';font-size: 18px;padding: 0 0 16px;line-height: 24px;color: #373737;margin:0;">
+						{{data.contents}}</h3>
+					<div ng-if="data.type == '9'" style="overflow:hidden">
+						<ul style="list-style:none;padding-left:15px;margin:0;">
+							<li ng-if="$index == 0"
+								style="font-family:'Noto Sans';font-size: 16px;line-height: 23px;color:#f96500; margin:0 0 8px 0;position:relative;"
+								ng-repeat="enter in enterPattern2(data.contents)">
+								<span style="position:absolute;top:0;left:-18px;">・</span>
+								<strong>{{enter.split(':')[0]}} : </strong>
+								<span style="color:#373737">{{enter.split(':')[1]}}</span>
+							</li>
+							<li ng-if="$index != 0"
+								style="font-family:'Noto Sans';font-size: 16px;line-height: 23px;color: #373737; margin:0 0 8px 0;position:relative"
+								ng-repeat="enter in enterPattern2(data.contents)">
+								<span style="position:absolute;top:0;left:-18px;">・</span>
+								<strong>{{enter.split(':')[0]}} : </strong>
+								<span>{{enter.split(':')[1]}}</span>
+							</li>
+						</ul>
 					</div>
 					<div ng-if="data.type == '10'" style="padding: 90px 0;">
-						<h2 style="font-family:'Noto Sans';position: relative;z-index: 10;background: #fff;display: inline-block;font-size: 18px;line-height:18px;padding:0 10px;margin: 0 0 0 12px;font-weight: 700;color: #666;text-shadow: 1px 0;letter-spacing: 0.5px;">Secret Tip</h2>
+						<h2
+							style="font-family:'Noto Sans';position: relative;z-index: 10;background: #fff;display: inline-block;font-size: 18px;line-height:18px;padding:0 10px;margin: 0 0 0 12px;font-weight: 700;color: #666;text-shadow: 1px 0;letter-spacing: 0.5px;">
+							Secret Tip</h2>
 						<div style="margin-top: -12px;border: 1px solid #b9b9b9;padding: 30px 20px 20px;">
-							<h3 style="font-family:'Noto Sans';display: block;font-size: 18px;line-height: 24px;margin:  0 0 5px;">{{data.contents.split(':')[0]}}</h3>
-							<p style="font-family:'Noto Sans';margin: 0;font-size: 14px;line-height: 23px;white-space: pre-wrap;">{{data.contents.split(':')[1]}}</p>
+							<h3
+								style="font-family:'Noto Sans';display: block;font-size: 18px;line-height: 24px;margin:  0 0 5px;">
+								{{data.contents.split(':')[0]}}</h3>
+							<p
+								style="font-family:'Noto Sans';margin: 0;font-size: 16px;line-height: 23px;white-space: pre-wrap;">
+								{{data.contents.split(':')[1]}}</p>
 						</div>
 					</div>
-					
+					<div ng-if="data.type == '11'" ng-style="{ padding : data.contents / 2 }">
+					</div>
+					<div ng-if="data.type == '12'">
+						<iframe width="100%" height="100%" style="min-height:300px;"
+							ng-src="{{setProject(data.contents)}}" frameborder="0"
+							allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+							allowfullscreen></iframe>
+					</div>
+					<div ng-if="data.type == '13'" id="info_img">
+						<img ng-src="{{data.contents}}" style="width:100%" />
+					</div>
 				</div>
 				<div class="config" ng-if="target == $index">
 					<span ng-click="htmlDataSort('up',$index)" ng-if="$index > 0">
@@ -300,7 +468,7 @@ fieldset select, fieldset textarea {
 				</span>
 			</div>
 		</div>
-		
+
 		<div class="right">
 			<fieldset>
 				<button type="button" class="btn" ng-click="handleMode()">{{mode}}</button>
@@ -313,23 +481,31 @@ fieldset select, fieldset textarea {
 						<option value="1">서브타이틀</option>
 						<option value="2">타이틀</option>
 						<option value="3">상품설명</option>
-						<option value="4">이미지</option>
+						<option value="4">상세이미지</option>
 						<option value="5">섹션타이틀(Check Point)</option>
 						<option value="6">이미지옵션항목</option>
 						<option value="7">섹션타이틀(Pick)</option>
 						<option value="8">옵션타이틀</option>
 						<option value="9">옵션항목</option>
 						<option value="10">팁(Tip)</option>
+						<option value="11">공백</option>
+						<option value="12">유튜브동영상</option>
+						<option value="13">정보이미지</option>
 					</select>
 				</fieldset>
 				<fieldset>
-					<div class="explain" ng-if="htmlData[target].type == '6'"><strong>작성법</strong><br/>1.성분, 2.유통, 3.활용법, 4.브랜드<br/> 번호 내용^내용^내용;</div>
-					<div class="explain" ng-if="htmlData[target].type == '9'"><strong>작성법</strong><br>: 구분 <br/> 제목 : 내용</div>
-					<div class="explain" ng-if="htmlData[target].type == '10'"><strong>작성법</strong><br/>: 구분 <br/> 제목 : 내용</div>
+					<div class="explain" ng-if="htmlData[target].type == '6'"><strong>작성법</strong><br />1.성분, 2.유통,
+						3.활용법, 4.브랜드<br /> 번호 내용^내용^내용;</div>
+					<div class="explain" ng-if="htmlData[target].type == '9'"><strong>작성법</strong><br>: 구분 <br /> 제목 :
+						내용</div>
+					<div class="explain" ng-if="htmlData[target].type == '10'"><strong>작성법</strong><br />: 구분 <br /> 제목
+						: 내용</div>
+					<div class="explain" ng-if="htmlData[target].type == '11'"><strong>작성법</strong><br /> 높이 숫자 표기</div>
 				</fieldset>
 				<fieldset>
 					<label>내용</label>
-					<textarea name="contents" ng-model="htmlData[target].contents" class="form-control" rows="20"></textarea>
+					<textarea name="contents" ng-model="htmlData[target].contents" class="form-control"
+						rows="20"></textarea>
 				</fieldset>
 				<fieldset>
 					<button type="submit" class="btn">저장</button>
@@ -337,235 +513,247 @@ fieldset select, fieldset textarea {
 				</fieldset>
 
 			</form>
-
 		</div>
 	</div>
 
 </body>
 <script>
-var app = angular.module('app', []);
+	var app = angular.module('app', []);
+
+	////////////// Service.game
+	app.service('api', function ($http, $log) {
+
+		this.dataLoad = function (url, dataVal) {
+
+			return $http({
+				method: 'POST',
+				url: url,
+				data: dataVal,
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			})
+				.then(function (response) {
+					console.log(response.data)
+					return response.data;
+				})
+				.catch(function (error) {
+					$log.error('ERROR:', error);
+					throw error;
+				});
+		}
+
+		this.formSubmit = function (url, dataVal) {
+
+			return $http({
+				method: 'POST',
+				url: url,
+				data: dataVal,
+				headers: {
+					'Content-Type': undefined
+				},
+				transformRequest: function (data, headersGetter) {
+					var formData = new FormData();
+					angular.forEach(data, function (value, key) {
+						formData.append(key, value);
+					});
+					var headers = headersGetter;
+					delete headers['Content-Type'];
+					return formData;
+				}
+			})
+				.then(function (response) {
+					return response.data;
+				})
+				.catch(function (error) {
+					$log.error('ERROR:', error);
+					throw error;
+				});
+		}
+
+	});
+
+	app.controller('uiController', function ($scope, $http, api, $sce) {
+
+		$scope.no = <? echo $no ?>;
+
+		$scope.dataLoad = function () {
+			var dataVal = { mode: "view", no: $scope.no }
+			api.dataLoad("/form/data", $.param(dataVal)).then(function (response) {
+				console.log(response);
+				if (!response.result) {
+					alert(response.error);
+					//location.href= "/";
+				} else {
+					$scope.htmlData = response.data.contents;
+				}
+			});
+		}
+
+		$scope.target = null;
+
+		$scope.mode = 'pc';
+
+		$scope.htmlDataAdd = function () {
+
+			var dataVal = { mode: "add", no: $scope.no }
+			api.dataLoad("/form/data", $.param(dataVal)).then(function (response) {
+				console.log(response);
+				if (!response.result) {
+					alert(response.error);
+					//location.href= "/";
+				} else {
+					$scope.dataLoad();
+				}
+			});
+
+		}
+
+		$scope.htmlDataDelete = function () {
+			var dataVal = { mode: "remove", index: $scope.target, no: $scope.no }
+			api.dataLoad("/form/data", $.param(dataVal)).then(function (response) {
+				console.log(response);
+				if (!response.result) {
+					alert(response.error);
+					//location.href= "/";
+				} else {
+					$scope.target = null
+					$scope.dataLoad();
+				}
+			});
+
+		}
+
+		$scope.htmlDataSync = function () {
+
+			if ($scope.htmlData.type == '6') {
+				if (Pattern.compile("\d+.")) {
+					alert('형식이 아닙니다.')
+				}
+			}
+
+			var dataVal = { mode: "sync", no: $scope.no, data: $scope.htmlData }
+			api.dataLoad("/form/data", $.param(dataVal)).then(function (response) {
+				//console.log(response);
+				if (!response.result) {
+					alert(response.error);
+					//location.href= "/";
+				} else {
+					$scope.dataLoad();
+				}
+			});
+
+		}
 
 
-////////////// Service.game
-app.service('api', function($http, $log) {
-	
- this.dataLoad = function(url, dataVal) {
 
-     return $http({
-             method: 'POST',
-             url: url,
-             data: dataVal,
-             headers: {
-                 'Content-Type': 'application/x-www-form-urlencoded'
-             }
-         })
-         .then(function(response) {
-             console.log(response.data)
-             return response.data;
-         })
-         .catch(function(error) {
-             $log.error('ERROR:', error);
-             throw error;
-         });
- }
+		$scope.setProject = function (id) {
+			//$scope.currentProject = $scope.projects[id];
+			//$scope.currentProjectUrl = $sce.trustAsResourceUrl($scope.currentProject.url);
+			return $sce.trustAsResourceUrl(id);
+		}
 
- this.formSubmit = function(url, dataVal) {
 
-     return $http({
-             method: 'POST',
-             url: url,
-             data: dataVal,
-             headers: {
-                 'Content-Type': undefined
-             },
-             transformRequest: function(data, headersGetter) {
-                 var formData = new FormData();
-                 angular.forEach(data, function(value, key) {
-                     formData.append(key, value);
-                 });
-                 var headers = headersGetter;
-                 delete headers['Content-Type'];
-                 return formData;
-             }
-         })
-         .then(function(response) {
-             return response.data;
-         })
-         .catch(function(error) {
-             $log.error('ERROR:', error);
-             throw error;
-         });
- }
- 
-});
+		$scope.htmlDataSort = function (t, n) {
 
-app.controller('uiController', function ($scope,$http,api) {
+			var dataVal = { mode: t, index: n, no: $scope.no }
+			if (t == 'up') {
+				console.log(n)
+				$scope.target = n - 1
+			} else {
+				console.log(n)
+				$scope.target = n + 1
+			}
+			api.dataLoad("/form/data", $.param(dataVal)).then(function (response) {
+				//console.log(response);
+				if (!response.result) {
+					alert(response.error);
+					//location.href= "/";
+				} else {
+					$scope.dataLoad();
+				}
+			});
 
-	  $scope.no = <? echo $no?>;
-	
-      $scope.dataLoad = function(){
-          var dataVal = { mode : "view", no : $scope.no }
-          api.dataLoad("/form/data",$.param(dataVal)).then(function(response){
-              console.log(response);
-    		    if(!response.result){
-                  alert(response.error);
-                  //location.href= "/";
-         		}else{
-                  $scope.htmlData = response.data.contents;
-         		}
-          });	
-      }
-      
-     $scope.target = null;
+		}
 
-     $scope.mode = 'pc';
-
-     $scope.htmlDataAdd = function(){
-
-         var dataVal = { mode : "add", no : $scope.no }
-         api.dataLoad("/form/data",$.param(dataVal)).then(function(response){
-            //console.log(response);
-   		    if(!response.result){
-                 alert(response.error);
-                 //location.href= "/";
-        		}else{
-                    $scope.dataLoad();
-        		}
-         });	
-
-     }
-
-     $scope.htmlDataDelete = function(){
-		console.log('1111' + $scope.target)
-         var dataVal = { mode : "remove", index : $scope.target, no : $scope.no }
-         api.dataLoad("/form/data",$.param(dataVal)).then(function(response){
-            console.log(response);
-   		    if(!response.result){
-                 alert(response.error);
-                 //location.href= "/";
-        		}else{
-                    $scope.dataLoad();
-        		}
-         });	
-
-     }
-
-     $scope.htmlDataSync = function(){
-		
-		if($scope.htmlData.type == '6'){
-			if(Pattern.compile("\d+.")){
-				alert('형식이 아닙니다.')
+		$scope.htmlDataClick = function (n) {
+			if ($scope.target == n) {
+				$scope.target = null
+			} else {
+				$scope.target = n;
 			}
 		}
-		
-         var dataVal = { mode : "sync", no : $scope.no , data : $scope.htmlData }
-         api.dataLoad("/form/data",$.param(dataVal)).then(function(response){
-            //console.log(response);
-   		    if(!response.result){
-                 alert(response.error);
-                 //location.href= "/";
-        		}else{
-                    $scope.dataLoad();
-        		}
-         });	
 
-     }
+		$scope.handleMode = function () {
+			if ($scope.mode == 'pc') {
+				$scope.mode = 'mobile'
+			} else {
+				$scope.mode = 'pc'
+			}
 
-     $scope.htmlDataSort = function(t,n){
-				
-         var dataVal = { mode : t, index : n, no : $scope.no }
-			if(t == 'up'){
-    			console.log(n)
-				$scope.target = n - 1
-    		}else{
-    			console.log(n)
-    			$scope.target = n + 1
-        	}
-         api.dataLoad("/form/data",$.param(dataVal)).then(function(response){
-            //console.log(response);
-   		    if(!response.result){
-                 alert(response.error);
-                 //location.href= "/";
-        		}else{
-                    $scope.dataLoad();
-        		}
-         });	
-
-     }
-
-     $scope.htmlDataClick = function(n){
- 		if($scope.target == n){
- 			$scope.target = null
- 		}else{
-    	 	$scope.target = n;
- 		}
-
-     }
-
-     $scope.handleMode = function(){
-  		if($scope.mode == 'pc'){
-  			$scope.mode = 'mobile'
-  		}else{
-  			$scope.mode = 'pc'
-  		}
-
-      }
-
-     $scope.imgPath = function(n){
-         if(n.includes('\n')){
-			num = n.split('\n')[0].concat(n.split('\n')[1])
-         }else{
-        	num = n
-         }
-		switch(num[0]){
-			case '1':
-				return 'http://ng001.godohosting.com/common/material.jpg';
-			case '2':
-				return 'http://ng001.godohosting.com/common/process.jpg';
-			case '3':
-				return 'http://ng001.godohosting.com/common/brand.jpg';
-			case '4':
-				return 'http://ng001.godohosting.com/common/use.jpg';
-			default : return''
 		}
 
-     }
+		$scope.imgPath = function (n) {
+			if (n.includes('\n')) {
+				num = n.split('\n')[0].concat(n.split('\n')[1])
+			} else {
+				num = n
+			}
+			switch (num[0]) {
+				case '1':
+					return 'http://ng001.godohosting.com/common/material.jpg';
+				case '2':
+					return 'http://ng001.godohosting.com/common/process.jpg';
+				case '3':
+					return 'http://ng001.godohosting.com/common/brand.jpg';
+				case '4':
+					return 'http://ng001.godohosting.com/common/use.jpg';
+				default: return ''
+			}
 
-     $scope.enterPattern = function(n){
-		var enterArray = n.split("^")
-		return enterArray
-      }
+		}
 
-     $scope.endPattern = function(n){
- 		var endArray = n.split(";")
- 		return endArray
-       }
+		$scope.enterPattern2 = function (n) {
+			var enterArray = n.split("\n")
+			return enterArray
+		}
 
-     $scope.enterDelete = function(n){
-  		var endDeleteArray = n.replace(/\n/g, "")
-  		return endDeleteArray
-        }
-     
-     $scope.copy = function(){
-        var a = $.makeArray($('.inner')[0]['outerHTML'])
-        var sucessCode = ''
-       	for(var i of $('.inner').toArray()){
-        		sucessCode += i['outerHTML'];
-         }
+		$scope.enterPattern = function (n) {
+			var enterArray = n.split("^")
+			return enterArray
+		}
 
- 		var tempEl =  document.createElement('textarea')
-     	tempEl.value = sucessCode
-     	document.body.appendChild(tempEl)
-    
-     	tempEl.select()
-     	document.execCommand('Copy')
-    	document.body.removeChild(tempEl)
-		
-     }
-     
-     $scope.dataLoad();
-	 
+		$scope.endPattern = function (n) {
+			var endArray = n.split(";")
+			return endArray
+		}
 
-});
+		$scope.enterDelete = function (n) {
+			var endDeleteArray = n.replace(/\n/g, "")
+			return endDeleteArray
+		}
+
+		$scope.copy = function () {
+			var a = $.makeArray($('.inner')[0]['outerHTML'])
+			var sucessCode = ''
+			for (var i of $('.inner').toArray()) {
+				sucessCode += i['outerHTML'];
+			}
+
+			var tempEl = document.createElement('textarea')
+			tempEl.value = sucessCode
+			document.body.appendChild(tempEl)
+
+			tempEl.select()
+			document.execCommand('Copy')
+			document.body.removeChild(tempEl)
+
+		}
+
+		$scope.dataLoad();
+
+
+	});
 </script>
+
 </html>
